@@ -16,6 +16,7 @@
 
 #include <ceed.h>
 #include <ceed-backend.h>
+#include <string.h>
 #include "ceed-magma.h"
 
 CEED_INTERN int CeedInit_Magma_Det(const char *resource, Ceed ceed) {

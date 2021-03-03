@@ -58,11 +58,6 @@ static int CeedInit_Magma(const char *resource, Ceed ceed) {
   // kernel selection
   data->basis_kernel_mode = MAGMA_KERNEL_DIM_SPECIFIC;
 
-  // kernel max threads per thread-block
-  data->maxthreads[0] = 128;  // for 1D kernels
-  data->maxthreads[1] = 128;  // for 2D kernels
-  data->maxthreads[2] =  64;  // for 3D kernels
-
   // create a queue that uses the null stream
   magma_getdevice( &(data->device) );
   #ifdef HAVE_HIP

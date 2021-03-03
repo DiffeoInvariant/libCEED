@@ -23,6 +23,11 @@
 #define MAGMA_DEVICE_SHARED(type, name) extern __shared__ type name[];
 #endif
 
+#define MAGMA_MAXTHREADS_1D 128
+#define MAGMA_MAXTHREADS_2D 128
+#define MAGMA_MAXTHREADS_3D 64
+#define MAGMA_BASIS_BOUNDS(x, max) x > max? x : max
+
 //////////////////////////////////////////////////////////////////////////////////////////
 // init scalar to zero
 template<typename T>
