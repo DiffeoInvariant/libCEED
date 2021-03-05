@@ -32,7 +32,7 @@ magma_interp_3d_kernel_driver(
     const int MAXPQ = maxpq(P,Q);
 
     magma_int_t nthreads = MAXPQ*MAXPQ;
-    magma_int_t ntcol = (MAGMA_MAXTHREADS_3D < nthreads) ? 1 : (MAGMA_MAXTHREADS_3D / nthreads);
+    magma_int_t ntcol = MAGMA_BASIS_NTCOL(nthreads, MAGMA_MAXTHREADS_3D);
     magma_int_t shmem  = 0;
     shmem += sizeof(T)* (P*Q);  // for sT
     shmem += sizeof(T)* ntcol * (max(P*P*MAXPQ, P*Q*Q));  // rU needs P^2xP, the intermediate output needs max(P^2xQ,PQ^2)    

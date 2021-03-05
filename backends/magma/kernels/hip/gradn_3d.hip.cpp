@@ -32,7 +32,7 @@ magma_gradn_3d_kernel_driver(
     const int MAXPQ = maxpq(P,Q);
 
     magma_int_t nthreads = MAXPQ*MAXPQ; 
-    magma_int_t ntcol = (MAGMA_MAXTHREADS_3D < nthreads) ? 1 : (MAGMA_MAXTHREADS_3D / nthreads);
+    magma_int_t ntcol = MAGMA_BASIS_NTCOL(nthreads, MAGMA_MAXTHREADS_3D);
     magma_int_t shmem  = 0;
     shmem += sizeof(T) * 2*P*Q;  // for sTinterp and sTgrad
     shmem += sizeof(T) * ntcol * max(P*P*P, (P*P*Q) + (P*Q*Q));  // rU needs P^2xP, the intermediate outputs need (P^2.Q + P.Q^2) 

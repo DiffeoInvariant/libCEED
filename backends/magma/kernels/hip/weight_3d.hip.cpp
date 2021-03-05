@@ -29,7 +29,7 @@ magma_weight_3d_kernel_driver(
     magma_int_t shmem_max, nthreads_max;
 
     magma_int_t nthreads = (Q*Q); 
-    magma_int_t ntcol = (MAGMA_MAXTHREADS_3D < nthreads) ? 1 : (MAGMA_MAXTHREADS_3D / nthreads);
+    magma_int_t ntcol = MAGMA_BASIS_NTCOL(nthreads, MAGMA_MAXTHREADS_3D);
     magma_int_t shmem  = 0;
     shmem += sizeof(T) * Q;  // for dqweight1d 
 

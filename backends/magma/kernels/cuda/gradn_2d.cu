@@ -32,7 +32,7 @@ magma_gradn_2d_kernel_driver(
     const int MAXPQ = maxpq(P,Q);
 
     magma_int_t nthreads = MAXPQ; 
-    magma_int_t ntcol = (MAGMA_MAXTHREADS_2D < nthreads) ? 1 : (MAGMA_MAXTHREADS_2D / nthreads);
+    magma_int_t ntcol = MAGMA_BASIS_NTCOL(nthreads, MAGMA_MAXTHREADS_2D);
     magma_int_t shmem  = 0;
     shmem += sizeof(T) * 2*P*Q;  // for sTinterp and sTgrad
     shmem += sizeof(T) * ntcol * (P*MAXPQ);  // for reforming rU we need PxP, and for the intermediate output we need PxQ    
