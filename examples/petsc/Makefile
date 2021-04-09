@@ -39,11 +39,16 @@ SRCDIR := src
 
 utils.c := $(sort $(wildcard $(SRCDIR)/*.c))
 
-all: area bps bpsraw bpssphere multigrid
+all: area bddc bps bpsraw bpssphere multigrid
 
 area.c := area.c $(utils.c)
 area.o = $(area.c:%.c=$(OBJDIR)/%.o)
 area: $(area.o) | $(PETSc.pc) $(ceed.pc)
+	$(call quiet,LINK.o) $(CEED_LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+bddc.c := bddc.c $(utils.c)
+bddc.o = $(bddc.c:%.c=$(OBJDIR)/%.o)
+bddc: $(bddc.o) | $(PETSc.pc) $(ceed.pc)
 	$(call quiet,LINK.o) $(CEED_LDFLAGS) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 bps.c := bps.c $(utils.c)
@@ -89,7 +94,7 @@ print: $(PETSc.pc) $(ceed.pc)
 	@true
 
 clean:
-	$(RM) -r $(OBJDIR) *.vtu area bps bpsraw bpssphere multigrid
+	$(RM) -r $(OBJDIR) *.vtu area bddc bps bpsraw bpssphere multigrid
 
 $(PETSc.pc):
 	$(if $(wildcard $@),,$(error \

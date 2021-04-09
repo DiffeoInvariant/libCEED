@@ -2,6 +2,7 @@
 *.vtu
 /area
 /petsc-area
+/bddc
 /bps
 /petsc-bps
 /bpsraw

@@ -226,6 +226,20 @@ PetscErrorCode SetupDMByDegree(DM dm, PetscInt degree, PetscInt num_comp_u,
 };
 
 // -----------------------------------------------------------------------------
+// This function sets up a BDDC vertex only DM from an existing fine DM
+// -----------------------------------------------------------------------------
+PetscErrorCode SetupVertexDMFromDM(DM dm, DM dm_vertex, PetscInt num_comp_u,
+                                   bool enforce_bc, BCFunction bc_func) {
+  PetscInt ierr, dim;
+
+  PetscFunctionBeginUser;
+  ierr = DMGetDimension(dm, &dim); CHKERRQ(ierr);
+  ierr = SetupDMByDegree(dm_vertex, 1, num_comp_u, dim, enforce_bc, bc_func);
+  CHKERRQ(ierr);
+  PetscFunctionReturn(0);
+};
+
+// -----------------------------------------------------------------------------
 // Utility function - essential BC dofs are encoded in closure indices as -(i+1)
 // -----------------------------------------------------------------------------
 PetscInt Involute(PetscInt i) {
