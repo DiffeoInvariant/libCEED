@@ -1122,33 +1122,32 @@ int CeedOperatorCreateFDMElementInverse_Ref(CeedOperator op,
   CeedChkBackend(ierr);
 
   // Calculate element averages
-  CeedInt num_fields = ((interp?1:0) + (grad?dim:0))*((interp?1:0) +
-                       (grad?dim:0));
+  CeedInt num_modes = (interp?1:0) + (grad?dim:0);
   CeedScalar *elem_avg;
-  const CeedScalar *assembledarray, *q_weight_array;
+  const CeedScalar *assembled_array, *q_weight_array;
   CeedVector q_weight;
   ierr = CeedVectorCreate(ceed_parent, num_qpts, &q_weight); CeedChkBackend(ierr);
   ierr = CeedBasisApply(basis, 1, CEED_NOTRANSPOSE, CEED_EVAL_WEIGHT,
                         CEED_VECTOR_NONE, q_weight); CeedChkBackend(ierr);
-  ierr = CeedVectorGetArrayRead(assembled, CEED_MEM_HOST, &assembledarray);
+  ierr = CeedVectorGetArrayRead(assembled, CEED_MEM_HOST, &assembled_array);
   CeedChkBackend(ierr);
   ierr = CeedVectorGetArrayRead(q_weight, CEED_MEM_HOST, &q_weight_array);
   CeedChkBackend(ierr);
   ierr = CeedCalloc(num_elem, &elem_avg); CeedChkBackend(ierr);
   for (CeedInt e=0; e<num_elem; e++) {
     CeedInt count = 0;
+    CeedInt elem_offset = e*num_qpts*num_comp*num_comp*num_modes*num_modes;
     for (CeedInt q=0; q<num_qpts; q++)
-      for (CeedInt i=0; i<num_comp*num_comp*num_fields; i++)
-        if (fabs(assembledarray[e*num_elem*num_qpts*num_comp*num_comp*num_fields +
-                                                                                 i*num_qpts + q]) > max_norm*1e-12) {
-          elem_avg[e] += assembledarray[e*num_elem*num_qpts*num_comp*num_comp*num_fields +
-                                        i*num_qpts + q] / q_weight_array[q];
+      for (CeedInt i=0; i<num_comp*num_comp*num_modes*num_modes; i++)
+        if (fabs(assembled_array[elem_offset + i*num_qpts + q]) > max_norm*1e-12) {
+          elem_avg[e] += assembled_array[elem_offset + i*num_qpts + q] /
+                         q_weight_array[q];
           count++;
         }
     if (count)
       elem_avg[e] /= count;
   }
-  ierr = CeedVectorRestoreArrayRead(assembled, &assembledarray);
+  ierr = CeedVectorRestoreArrayRead(assembled, &assembled_array);
   CeedChkBackend(ierr);
   ierr = CeedVectorDestroy(&assembled); CeedChkBackend(ierr);
   ierr = CeedVectorRestoreArrayRead(q_weight, &q_weight_array);
