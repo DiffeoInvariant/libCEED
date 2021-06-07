@@ -341,6 +341,38 @@ class Vector():
 
         return self
 
+    # Compute self = alpha self
+    def scale(self, alpha):
+        """Compute self = alpha self."""
+
+        # libCEED call
+        err_code = lib.CeedVectorScale(self._pointer[0], alpha)
+        self._ceed._check_error(err_code)
+
+        return self
+
+    # Compute self = alpha x + self
+    def axpy(self, alpha, x):
+        """Compute self = alpha x + self."""
+
+        # libCEED call
+        err_code = lib.CeedVectorAXPY(self._pointer[0], alpha, x._pointer[0])
+        self._ceed._check_error(err_code)
+
+        return self
+
+    # Compute the pointwise multiplication self = x .* y
+    def pointwise_mult(self, x, y):
+        """Compute the pointwise multiplication self = x .* y."""
+
+        # libCEED call
+        err_code = lib.CeedVectorPointwiseMult(
+            self._pointer[0], x._pointer[0], y._pointer[0]
+        )
+        self._ceed._check_error(err_code)
+
+        return self
+
     def _state(self):
         """Return the modification state of the Vector.
 

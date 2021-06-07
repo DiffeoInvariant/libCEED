@@ -170,8 +170,8 @@ int CeedElemRestrictionIsStrided(CeedElemRestriction rstr, bool *is_strided) {
 /**
   @brief Get the backend stride status of a CeedElemRestriction
 
-  @param rstr         CeedElemRestriction
-  @param[out] status  Variable to store stride status
+  @param rstr                      CeedElemRestriction
+  @param[out] has_backend_strides  Variable to store stride status
 
   @return An error code: 0 - success, otherwise - failure
 
@@ -919,9 +919,11 @@ int CeedElemRestrictionDestroy(CeedElemRestriction *rstr) {
 
   if (!*rstr || --(*rstr)->ref_count > 0) return CEED_ERROR_SUCCESS;
   if ((*rstr)->num_readers)
+    // LCOV_EXCL_START
     return CeedError((*rstr)->ceed, CEED_ERROR_ACCESS,
                      "Cannot destroy CeedElemRestriction, "
                      "a process has read access to the offset data");
+  // LCOV_EXCL_STOP
   if ((*rstr)->Destroy) {
     ierr = (*rstr)->Destroy(*rstr); CeedChk(ierr);
   }

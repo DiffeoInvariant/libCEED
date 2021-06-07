@@ -18,12 +18,19 @@ New features
 ^^^^^^^^^^^^
 
 * Add :c:func:`CeedVectorAXPY` and :c:func:`CeedVectorPointwiseMult` as a convenience for stand-alone testing and internal use.
+* Add `CEED_QFUNCTION_HELPER` macro to properly annotate QFunction helper functions for code generation backends.
 
 Performance improvements
 ^^^^^^^^^^^^^^^^^^^^^^^^
 
 Examples
 ^^^^^^^^
+
+* Solid mechanics mini-app updated to explore the performance impacts of various formulations in the initial and current configuration.
+
+Deprecated backends
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+* The ``/cpu/self/tmpl`` and ``/cpu/self/tmpl/sub`` backends have been removed. These backends were intially added to test the backend inheritance mechanism, but this mechanism is now widely used and tested in multiple backends.
 
 
 .. _v0.8:
